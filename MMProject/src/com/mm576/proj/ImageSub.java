@@ -74,6 +74,9 @@ public class ImageSub {
           }
 
            out.put(0, 0, data);
+           
+           //This did not help either, haven't found solution yet
+           //out.convertTo(out, CvType.CV_32F);
            return out;
      }
 	

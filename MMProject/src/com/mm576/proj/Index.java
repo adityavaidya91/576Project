@@ -37,11 +37,21 @@ public class Index {
 		for(int i = 0; i < imgArr.length; i++) {
 			imgArr[i] = new ImageSub(files[i], WIDTH, HEIGHT);
 		}
+		compareImages(imgArr[0], imgArr[1]);
 		showResult(imgArr[0]);
 	}
 	
-	public static void showResult(BufferedImage img) {
-		
+	
+	/*
+	 * A few good references: http://stackoverflow.com/questions/22464503/how-to-use-opencv-to-calculate-hsv-histogram-in-java-platform
+	 * http://stackoverflow.com/questions/11541154/checking-images-for-similarity-with-opencv
+	 * http://docs.opencv.org/doc/tutorials/imgproc/histograms/histogram_comparison/histogram_comparison.html
+	 * http://www.pyimagesearch.com/2014/07/14/3-ways-compare-histograms-using-opencv-python/
+	 */
+	public static void compareImages(ImageSub img1, ImageSub img2) {
+		//This does not work directly, it needs to be greyscale images
+		//double res = Imgproc.compareHist(img1.cvImg, img2.cvImg, Imgproc.CV_COMP_CORREL);
+		//System.out.println(res);
 	}
 	
 	public static void showResult(ImageSub img) {
