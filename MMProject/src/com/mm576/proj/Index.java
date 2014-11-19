@@ -37,8 +37,17 @@ public class Index {
 		for(int i = 0; i < imgArr.length; i++) {
 			imgArr[i] = new ImageSub(files[i], WIDTH, HEIGHT);
 		}
-		compareImages(imgArr[0], imgArr[1]);
-		showResult(imgArr[0]);
+		
+		double[][] diffArr = new double[imgArr.length][imgArr.length];
+		for(int i = 0; i < imgArr.length; i++) {
+			for(int j = 0; j < imgArr.length; j++) {
+				if(i != j && diffArr[j][i] == 0) {
+					diffArr[i][j] = compareImages(imgArr[i], imgArr[j]);
+					diffArr[j][i] = diffArr[i][j];
+				}
+			}
+		}
+		//showResult(imgArr[0]);
 	}
 	
 	
@@ -47,12 +56,20 @@ public class Index {
 	 * http://stackoverflow.com/questions/11541154/checking-images-for-similarity-with-opencv
 	 * http://docs.opencv.org/doc/tutorials/imgproc/histograms/histogram_comparison/histogram_comparison.html
 	 * http://www.pyimagesearch.com/2014/07/14/3-ways-compare-histograms-using-opencv-python/
+	 * 
+	 * The current version implements a compareHist on R,G,B channels and returns a double of Root Mean Square Distance
 	 */
-	public static void compareImages(ImageSub img1, ImageSub img2) {
+	public static double compareImages(ImageSub img1, ImageSub img2) {
 		//This does not work directly, it needs to be greyscale images
-		double res = Imgproc.compareHist(img1.cvChannels.get(0), img2.cvChannels.get(0), Imgproc.CV_COMP_CORREL);
-		System.out.println(res);
-		
+		double[] channels = new double[3];
+		double sumOfSquares = 0;
+		for(int i = 0; i < channels.length; i++) {
+			channels[i] = Imgproc.compareHist(img1.cvChannels.get(i), img2.cvChannels.get(i), Imgproc.CV_COMP_CORREL);
+			sumOfSquares += channels[i] * channels[i];
+		}
+		sumOfSquares /= channels.length;
+		System.out.println(sumOfSquares);
+		return Math.sqrt(sumOfSquares);
 	}
 	
 	public static void showResult(ImageSub img) {
