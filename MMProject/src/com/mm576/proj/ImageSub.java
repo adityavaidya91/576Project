@@ -83,11 +83,6 @@ public class ImageSub {
            for(Mat m : mv) {
         	   m.convertTo(m, CvType.CV_32F);
            }
-           
-           //System.out.println(mv.size());
-           
-           //This did not help either, haven't found solution yet
-           //out.convertTo(out, CvType.CV_32F);
            return out;
      }
 	
