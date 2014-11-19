@@ -50,8 +50,9 @@ public class Index {
 	 */
 	public static void compareImages(ImageSub img1, ImageSub img2) {
 		//This does not work directly, it needs to be greyscale images
-		//double res = Imgproc.compareHist(img1.cvImg, img2.cvImg, Imgproc.CV_COMP_CORREL);
-		//System.out.println(res);
+		double res = Imgproc.compareHist(img1.cvChannels.get(0), img2.cvChannels.get(0), Imgproc.CV_COMP_CORREL);
+		System.out.println(res);
+		
 	}
 	
 	public static void showResult(ImageSub img) {

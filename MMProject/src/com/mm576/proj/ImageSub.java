@@ -3,7 +3,9 @@ package com.mm576.proj;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.*;
+import java.util.*;
 
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
@@ -12,12 +14,14 @@ public class ImageSub {
 	int width, height;
 	BufferedImage javaImg;
 	Mat cvImg;
+	List<Mat> cvChannels;
 	
 	public ImageSub(File file, int width, int height) {
 		this.width = width;
 		this.height = height;
 		javaImg = readImage(file);
-		cvImg = ImageSub.img2Mat(javaImg);
+		cvChannels = new LinkedList<Mat>();
+		cvImg = ImageSub.img2Mat(cvChannels, javaImg);
 	}
 	
 	//This is the starter code for the course
@@ -57,7 +61,7 @@ public class ImageSub {
 	}
 	
 	//Helper methods from codeproject.com to convert BufferedImage to Mat and vice-versa
-	public static Mat img2Mat(BufferedImage in)
+	public static Mat img2Mat(List<Mat> mv, BufferedImage in)
     {
           Mat out;
           byte[] data;
@@ -74,6 +78,13 @@ public class ImageSub {
           }
 
            out.put(0, 0, data);
+           
+           Core.split(out, mv);
+           for(Mat m : mv) {
+        	   m.convertTo(m, CvType.CV_32F);
+           }
+           
+           //System.out.println(mv.size());
            
            //This did not help either, haven't found solution yet
            //out.convertTo(out, CvType.CV_32F);
