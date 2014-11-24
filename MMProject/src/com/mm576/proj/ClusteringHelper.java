@@ -1,6 +1,11 @@
 package com.mm576.proj;
 
 import java.util.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
 import com.apporiented.algorithm.clustering.*;
 import com.apporiented.algorithm.clustering.visualization.*;
 
@@ -27,33 +32,15 @@ public class ClusteringHelper {
 		Cluster cluster = alg.performClustering(diffArr, names,
 		    new AverageLinkageStrategy());
 		cluster.toConsole(5);
-		System.out.println(cluster.toString());
+		//System.out.println(cluster.toString());
 		DendrogramPanel dp = new DendrogramPanel();
 		dp.setModel(cluster);
-		//initCentroids();
-		//cluster();
+		JFrame frame = new JFrame();
+        frame.add(dp);
+        frame.pack();
+        frame.setVisible(true);
 	}
 	
-	public List<List<ImageSub>> cluster() {
-		List<List<ImageSub>> result = new LinkedList<List<ImageSub>>();
-		
-		return result;
-	}
-	
-	public void initCentroids() {
-		if(centroids.size() > imgArr.length) {
-			return;
-		}
-		int i = 0;
-		for(ImageSub centroid: centroids) {
-			centroid = imgArr[i++];
-		}
-	}
-	
-	public void updateCentroids() {
-		
-	}
-
 	public void calcDist() {
 		
 		for(int i = 0; i < imgArr.length; i++) {
@@ -83,7 +70,7 @@ public class ClusteringHelper {
 			sumOfSquares += channels[i] * channels[i];
 		}
 		sumOfSquares /= channels.length;
-		System.out.println(sumOfSquares);
+		//System.out.println(sumOfSquares);
 		return Math.sqrt(sumOfSquares);
 	}
 }

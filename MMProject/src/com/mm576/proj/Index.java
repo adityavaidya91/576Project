@@ -19,11 +19,11 @@ public class Index {
 	//Options available: Use a Factory design pattern
 	//Keeping it as is might also work, if we are considering first frame only
 	static ImageSub[] imgArr;
-	static final int WIDTH = 512;
-	static final int HEIGHT = 512;
+	static final int WIDTH = 352;
+	static final int HEIGHT = 288;
 
 	//Modify this for now, read in different directories
-	static String dirName = "sample";
+	static String dirName = "dataset-1";
 	
 	public static void main( String[] args )
 	{
@@ -38,7 +38,11 @@ public class Index {
 		for(int i = 0; i < imgArr.length; i++) {
 			imgArr[i] = new ImageSub(files[i], WIDTH, HEIGHT);
 		}		
-		//showResult(imgArr[0]);
+		for(ImageSub img: imgArr){
+			if(img.name.indexOf("02")!=-1 || img.name.indexOf("39")!=-1)
+				showResult(img);
+		}
+			
 	}
 	
 	//This displays only one image
@@ -46,6 +50,7 @@ public class Index {
 	    try {
 	        JFrame frame = new JFrame();
 	        frame.getContentPane().add(new JLabel(new ImageIcon(img.javaImg)));
+	        frame.setTitle(img.name);
 	        frame.pack();
 	        frame.setVisible(true);
 	    } catch (Exception e) {
