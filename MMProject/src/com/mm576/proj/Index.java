@@ -18,7 +18,10 @@ public class Index {
 	//@TODO: Handle videos here, remember only a representative frame is needed
 	//Options available: Use a Factory design pattern
 	//Keeping it as is might also work, if we are considering first frame only
+	
+	//@TODO: Use only map or Arr, too much redundancy. Could consider just storing array index in map
 	static ImageSub[] imgArr;
+	static HashMap<String, Integer> imgMap;
 	static final int WIDTH = 352;
 	static final int HEIGHT = 288;
 
@@ -29,18 +32,20 @@ public class Index {
 	{
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
 		iterateDirectory(dirName);
-		ClusteringHelper k = new ClusteringHelper(imgArr, 3); //If sufficiently large, make this imgArr.length/10
+		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, 3); //If sufficiently large, make this imgArr.length/10
 	}
 	
 	public static void iterateDirectory(String dirName) {
 		File[] files = new File(dirName).listFiles();
 		imgArr = new ImageSub[files.length];
+		imgMap = new HashMap<>();
 		for(int i = 0; i < imgArr.length; i++) {
 			imgArr[i] = new ImageSub(files[i], WIDTH, HEIGHT);
+			imgMap.put(files[i].getName(), i);
 		}		
-		for(ImageSub img: imgArr){
-			if(img.name.indexOf("02")!=-1 || img.name.indexOf("39")!=-1)
-				showResult(img);
+		for(String s: imgMap.keySet()){
+			if(s.indexOf("042")!=-1 || s.indexOf("50")!=-1)
+				showResult(imgArr[imgMap.get(s)]);
 		}
 			
 	}

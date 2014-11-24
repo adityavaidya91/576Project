@@ -12,20 +12,20 @@ import com.apporiented.algorithm.clustering.visualization.*;
 import org.opencv.imgproc.Imgproc;
 
 public class ClusteringHelper {
-
+	
+	HashMap<String, Integer> imgMap;
 	ImageSub[] imgArr;
-	List<ImageSub> centroids;
 	String[] names;
 	double[][] diffArr;
 	
 	//Have not used k yet
-	ClusteringHelper(ImageSub[] imgArr, int k) {
+	ClusteringHelper(HashMap<String, Integer> imgMap, ImageSub[] imgArr, int k) {
 		this.imgArr = imgArr;
+		this.imgMap = imgMap;
 		names = new String[imgArr.length];
 		for(int i = 0; i < imgArr.length; i++) {
 			names[i] = imgArr[i].name;
 		}
-		//centroids = new ArrayList<ImageSub>(k);
 		diffArr = new double[imgArr.length][imgArr.length];
 		calcDist();
 		ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
