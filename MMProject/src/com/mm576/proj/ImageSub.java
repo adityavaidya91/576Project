@@ -15,10 +15,12 @@ public class ImageSub {
 	BufferedImage javaImg;
 	Mat cvImg;
 	List<Mat> cvChannels;
+	String name;
 	
 	public ImageSub(File file, int width, int height) {
 		this.width = width;
 		this.height = height;
+		name = file.getName();
 		javaImg = readImage(file);
 		cvChannels = new LinkedList<Mat>();
 		cvImg = ImageSub.img2Mat(cvChannels, javaImg);

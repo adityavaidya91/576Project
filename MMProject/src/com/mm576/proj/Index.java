@@ -29,7 +29,7 @@ public class Index {
 	{
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
 		iterateDirectory(dirName);
-		KMeans k = new KMeans(imgArr, 3); //If sufficiently large, make this imgArr.length/10
+		ClusteringHelper k = new ClusteringHelper(imgArr, 3); //If sufficiently large, make this imgArr.length/10
 	}
 	
 	public static void iterateDirectory(String dirName) {

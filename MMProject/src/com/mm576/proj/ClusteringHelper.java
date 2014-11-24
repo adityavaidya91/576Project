@@ -1,22 +1,37 @@
 package com.mm576.proj;
 
 import java.util.*;
+import com.apporiented.algorithm.clustering.*;
+import com.apporiented.algorithm.clustering.visualization.*;
 
 import org.opencv.imgproc.Imgproc;
 
-public class KMeans {
-	static int maxIterations = 20;
-	int k;
+public class ClusteringHelper {
+
 	ImageSub[] imgArr;
 	List<ImageSub> centroids;
+	String[] names;
+	double[][] diffArr;
 	
-	KMeans(ImageSub[] imgArr, int k) {
-		this.k = k;
+	//Have not used k yet
+	ClusteringHelper(ImageSub[] imgArr, int k) {
 		this.imgArr = imgArr;
-		centroids = new LinkedList<ImageSub>();
+		names = new String[imgArr.length];
+		for(int i = 0; i < imgArr.length; i++) {
+			names[i] = imgArr[i].name;
+		}
+		//centroids = new ArrayList<ImageSub>(k);
+		diffArr = new double[imgArr.length][imgArr.length];
 		calcDist();
-		initCentroids();
-		cluster();
+		ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
+		Cluster cluster = alg.performClustering(diffArr, names,
+		    new AverageLinkageStrategy());
+		cluster.toConsole(5);
+		System.out.println(cluster.toString());
+		DendrogramPanel dp = new DendrogramPanel();
+		dp.setModel(cluster);
+		//initCentroids();
+		//cluster();
 	}
 	
 	public List<List<ImageSub>> cluster() {
@@ -26,6 +41,9 @@ public class KMeans {
 	}
 	
 	public void initCentroids() {
+		if(centroids.size() > imgArr.length) {
+			return;
+		}
 		int i = 0;
 		for(ImageSub centroid: centroids) {
 			centroid = imgArr[i++];
@@ -37,7 +55,7 @@ public class KMeans {
 	}
 
 	public void calcDist() {
-		double[][] diffArr = new double[imgArr.length][imgArr.length];
+		
 		for(int i = 0; i < imgArr.length; i++) {
 			for(int j = 0; j < imgArr.length; j++) {
 				if(i != j && diffArr[j][i] == 0) {
