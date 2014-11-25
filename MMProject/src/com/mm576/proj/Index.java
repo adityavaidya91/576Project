@@ -15,10 +15,6 @@ import org.opencv.imgproc.*;
 
 public class Index {
 	
-	//@TODO: Handle videos here, remember only a representative frame is needed
-	//Options available: Use a Factory design pattern
-	//Keeping it as is might also work, if we are considering first frame only
-	
 	//@TODO: Use only map or Arr, too much redundancy. Could consider just storing array index in map
 	static ImageSub[] imgArr;
 	static HashMap<String, Integer> imgMap;
