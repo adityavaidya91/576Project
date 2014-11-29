@@ -17,8 +17,9 @@ public class ClusteringHelper {
 	ImageSub[] imgArr;
 	String[] names;
 	double[][] diffArr;
+	ArrayList<ArrayList<Cluster>> clusters;
+	ArrayList<Cluster> representativeLevel;
 	
-	//Have not used k yet
 	ClusteringHelper(HashMap<String, Integer> imgMap, ImageSub[] imgArr, int k) {
 		this.imgArr = imgArr;
 		this.imgMap = imgMap;
@@ -31,8 +32,17 @@ public class ClusteringHelper {
 		ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
 		Cluster cluster = alg.performClustering(diffArr, names,
 		    new AverageLinkageStrategy());
-		cluster.toConsole(5);
-		//System.out.println(cluster.toString());
+		clusters = bfsCreateLevel(cluster);
+		for(ArrayList<Cluster> level: clusters) {
+			if(level.size() > k) {
+				representativeLevel = level;
+				break;
+			}
+		}
+		//System.out.println(representativeLevel.toString());
+	}
+	
+	public void showDendrogram(Cluster cluster) {
 		DendrogramPanel dp = new DendrogramPanel();
 		dp.setModel(cluster);
 		JFrame frame = new JFrame();
@@ -54,15 +64,10 @@ public class ClusteringHelper {
 	}
 	
 	
-	/*
-	 * A few good references: http://stackoverflow.com/questions/22464503/how-to-use-opencv-to-calculate-hsv-histogram-in-java-platform
-	 * http://stackoverflow.com/questions/11541154/checking-images-for-similarity-with-opencv
-	 * http://docs.opencv.org/doc/tutorials/imgproc/histograms/histogram_comparison/histogram_comparison.html
-	 * http://www.pyimagesearch.com/2014/07/14/3-ways-compare-histograms-using-opencv-python/
-	 * 
+	/* 
 	 * The current version implements a compareHist on R,G,B channels and returns a double of Root Mean Square Distance
 	 */
-	public static double compareImages(ImageSub img1, ImageSub img2) {
+	public double compareImages(ImageSub img1, ImageSub img2) {
 		double[] channels = new double[3];
 		double sumOfSquares = 0;
 		for(int i = 0; i < channels.length; i++) {
@@ -72,5 +77,33 @@ public class ClusteringHelper {
 		sumOfSquares /= channels.length;
 		//System.out.println(sumOfSquares);
 		return Math.sqrt(sumOfSquares);
+	}
+	
+	public ArrayList<ArrayList<Cluster>> bfsCreateLevel(Cluster root) {
+		if(root == null)
+			return null;
+		ArrayList<ArrayList<Cluster>> levels = new ArrayList<ArrayList<Cluster>> ();
+		ArrayList<Cluster> currentLevel = new ArrayList<Cluster>();
+		currentLevel.add(root);
+		boolean childExist = true;
+		while(currentLevel.size() > 0 && childExist) {
+			childExist = false;
+			levels.add(currentLevel);
+			ArrayList<Cluster> parents = currentLevel;
+			currentLevel = new ArrayList<>();
+			
+			for(Cluster clus: parents) {
+				List<Cluster> children = clus.getChildren();
+				if(children.size() == 0) {
+					currentLevel.add(clus);
+				}
+				for(Cluster c: children) {
+					currentLevel.add(c);
+					childExist = true;
+				}
+			}	
+		}
+		
+		return levels;
 	}
 }

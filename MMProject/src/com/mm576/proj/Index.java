@@ -15,7 +15,8 @@ import org.opencv.imgproc.*;
 
 public class Index {
 	
-	//@TODO: Use only map or Arr, too much redundancy. Could consider just storing array index in map
+	//@TODO: Don't use the imgArr and imgMap statics
+	//Reconsider doing this post completion, keeping it here for now
 	static ImageSub[] imgArr;
 	static HashMap<String, Integer> imgMap;
 	static final int WIDTH = 352;
@@ -27,11 +28,10 @@ public class Index {
 	public static void main( String[] args )
 	{
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
-		iterateDirectory(dirName);
-		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, 3); //If sufficiently large, make this imgArr.length/10
+		iterateAndClusterDirectory(dirName);
 	}
 	
-	public static void iterateDirectory(String dirName) {
+	public static void iterateAndClusterDirectory(String dirName) {
 		File[] files = new File(dirName).listFiles();
 		imgArr = new ImageSub[files.length];
 		imgMap = new HashMap<>();
@@ -43,7 +43,7 @@ public class Index {
 			if(s.indexOf("042")!=-1 || s.indexOf("50")!=-1)
 				showResult(imgArr[imgMap.get(s)]);
 		}
-			
+		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/10);	
 	}
 	
 	//This displays only one image
