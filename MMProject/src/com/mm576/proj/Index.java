@@ -13,6 +13,8 @@ import org.opencv.highgui.Highgui;
 //This import is for all calcHist, compare and image processing
 import org.opencv.imgproc.*;
 
+import com.apporiented.algorithm.clustering.Cluster;
+
 public class Index {
 	
 	//@TODO: Don't use the imgArr and imgMap statics
@@ -40,18 +42,55 @@ public class Index {
 			imgMap.put(files[i].getName(), i);
 		}		
 		for(String s: imgMap.keySet()){
-			if(s.indexOf("042")!=-1 || s.indexOf("50")!=-1)
-				showResult(imgArr[imgMap.get(s)]);
+			//if(s.indexOf("042")!=-1 || s.indexOf("50")!=-1)
+				//showResult(imgArr[imgMap.get(s)]);
 		}
 		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/10);	
+		ArrayList<Cluster> representativeLevel = k.representativeLevel;
+		ArrayList<String> displayList = createDisplayList(representativeLevel);
+		System.out.println(displayList.toString());
+		showImageGrid(displayList);
 	}
 	
+	public static ArrayList<String> createDisplayList(ArrayList<Cluster> representativeLevel) {
+		ArrayList<String> returnList = new ArrayList<>();
+		for(Cluster c: representativeLevel) {
+			if(c.getName().indexOf("&") != -1) {
+				returnList.add(c.getName().substring(0, c.getName().indexOf("&")));
+			}
+			else
+				returnList.add(c.getName());
+		}
+		return returnList;
+	}
 	//This displays only one image
 	public static void showResult(ImageSub img) {
 	    try {
 	        JFrame frame = new JFrame();
 	        frame.getContentPane().add(new JLabel(new ImageIcon(img.javaImg)));
 	        frame.setTitle(img.name);
+	        frame.pack();
+	        frame.setVisible(true);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public static void showImageGrid(ArrayList<String> displayList) {
+		try {
+	        JFrame frame = new JFrame();
+	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        GridLayout gl = new GridLayout(4, 4, 3, 3);
+	        frame.setLayout(gl);
+	        JLabel labels[] = new JLabel[displayList.size()];
+	        for(int i = 0; i < displayList.size(); i++) {
+	        	BufferedImage imgToAdd = imgArr[imgMap.get(displayList.get(i))].javaImg;
+	        	labels[i] = new JLabel();
+	        	labels[i].setIcon(new ImageIcon(imgToAdd));
+	        	frame.add(labels[i]);
+	        }
+	        //frame.getContentPane().add(new GridLayout(4, 4, 3, 3));
+	        //frame.setTitle(img.name); @TODO: Pass in name here!
 	        frame.pack();
 	        frame.setVisible(true);
 	    } catch (Exception e) {

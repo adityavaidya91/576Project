@@ -39,7 +39,7 @@ public class ClusteringHelper {
 				break;
 			}
 		}
-		//System.out.println(representativeLevel.toString());
+		System.out.println(representativeLevel.toString());
 	}
 	
 	public void showDendrogram(Cluster cluster) {
