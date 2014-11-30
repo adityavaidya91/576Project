@@ -21,6 +21,7 @@ public class Index {
 	//Reconsider doing this post completion, keeping it here for now
 	static ImageSub[] imgArr;
 	static HashMap<String, Integer> imgMap;
+	static HashMap<String, ArrayList<String>> clusterReps = new HashMap<>();
 	static final int WIDTH = 352;
 	static final int HEIGHT = 288;
 
@@ -45,24 +46,14 @@ public class Index {
 			//if(s.indexOf("042")!=-1 || s.indexOf("50")!=-1)
 				//showResult(imgArr[imgMap.get(s)]);
 		}
-		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/10);	
-		ArrayList<Cluster> representativeLevel = k.representativeLevel;
-		ArrayList<String> displayList = createDisplayList(representativeLevel);
-		System.out.println(displayList.toString());
-		showImageGrid(displayList);
+		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/4);	
+		clusterReps = createClusterReps(k.representativeLevel);
+		ArrayList<String> displayList = new ArrayList<>(clusterReps.keySet());
+		//System.out.println(displayList.toString());
+		showImageGrid(displayList, "Initial");
+		
 	}
 	
-	public static ArrayList<String> createDisplayList(ArrayList<Cluster> representativeLevel) {
-		ArrayList<String> returnList = new ArrayList<>();
-		for(Cluster c: representativeLevel) {
-			if(c.getName().indexOf("&") != -1) {
-				returnList.add(c.getName().substring(0, c.getName().indexOf("&")));
-			}
-			else
-				returnList.add(c.getName());
-		}
-		return returnList;
-	}
 	//This displays only one image
 	public static void showResult(ImageSub img) {
 	    try {
@@ -76,25 +67,46 @@ public class Index {
 	    }
 	}
 	
-	public static void showImageGrid(ArrayList<String> displayList) {
+	public static void showImageGrid(ArrayList<String> displayList, String when) {
 		try {
 	        JFrame frame = new JFrame();
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        GridLayout gl = new GridLayout(4, 4, 3, 3);
+	        //Kuch karo
+	        GridLayout gl = new GridLayout(5, 5, 4, 4);
 	        frame.setLayout(gl);
 	        JLabel labels[] = new JLabel[displayList.size()];
 	        for(int i = 0; i < displayList.size(); i++) {
 	        	BufferedImage imgToAdd = imgArr[imgMap.get(displayList.get(i))].javaImg;
 	        	labels[i] = new JLabel();
-	        	labels[i].setIcon(new ImageIcon(imgToAdd));
+	        	labels[i].setIcon(new ImageIcon(imgToAdd.getScaledInstance(WIDTH/3, HEIGHT/3, Image.SCALE_SMOOTH)));
+
+	        	if(when.equals("Initial")) {
+	        		//bind listeners
+	        	}
+	        	else {
+	        		//Navigate back option
+	        	}
 	        	frame.add(labels[i]);
 	        }
-	        //frame.getContentPane().add(new GridLayout(4, 4, 3, 3));
 	        //frame.setTitle(img.name); @TODO: Pass in name here!
 	        frame.pack();
 	        frame.setVisible(true);
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
+	}
+	
+	public static HashMap<String, ArrayList<String>> createClusterReps(ArrayList<Cluster> representativeLevel) {
+		HashMap<String, ArrayList<String>> returnMap = new HashMap<String, ArrayList<String>>();
+		for(Cluster c: representativeLevel) {
+			if(c.getName().indexOf("&") != -1) {
+				String name = c.getName().substring(0, c.getName().indexOf("&"));
+				ArrayList<String> names = new ArrayList<>(Arrays.asList(c.getName().split("&")));
+				returnMap.put(name, names);
+			}
+			else
+				returnMap.put(c.getName(), null);
+		}
+		return returnMap;
 	}
 }	
