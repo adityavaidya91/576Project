@@ -1,5 +1,7 @@
 package com.mm576.proj;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.*;
 import java.io.*;
 
@@ -43,8 +45,8 @@ public class Index {
 			imgMap.put(files[i].getName(), i);
 		}		
 		for(String s: imgMap.keySet()){
-			//if(s.indexOf("042")!=-1 || s.indexOf("50")!=-1)
-				//showResult(imgArr[imgMap.get(s)]);
+			//if(s.indexOf("015")!=-1 )
+			//	showResult(imgArr[imgMap.get(s)]);
 		}
 		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/4);	
 		clusterReps = createClusterReps(k.representativeLevel);
@@ -79,9 +81,9 @@ public class Index {
 	        	BufferedImage imgToAdd = imgArr[imgMap.get(displayList.get(i))].javaImg;
 	        	labels[i] = new JLabel();
 	        	labels[i].setIcon(new ImageIcon(imgToAdd.getScaledInstance(WIDTH/3, HEIGHT/3, Image.SCALE_SMOOTH)));
-
 	        	if(when.equals("Initial")) {
 	        		//bind listeners
+	        		labels[i].addMouseListener(new MyMouseListener(clusterReps.get(displayList.get(i))));
 	        	}
 	        	else {
 	        		//Navigate back option
@@ -104,8 +106,11 @@ public class Index {
 				ArrayList<String> names = new ArrayList<>(Arrays.asList(c.getName().split("&")));
 				returnMap.put(name, names);
 			}
-			else
-				returnMap.put(c.getName(), null);
+			else {
+				ArrayList<String> names = new ArrayList<String>();
+				names.add(c.getName());
+				returnMap.put(c.getName(), names);
+			}
 		}
 		return returnMap;
 	}
