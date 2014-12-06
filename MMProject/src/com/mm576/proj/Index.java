@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.util.*;
 
 import org.opencv.core.*;
-import org.opencv.highgui.Highgui;
 //This import is for all calcHist, compare and image processing
 import org.opencv.imgproc.*;
 
@@ -75,8 +74,9 @@ public class Index {
 	        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        //Kuch karo
-	        GridLayout gl = new GridLayout(5, 5, 4, 4);
+	        
+	        int gridSize = (int)Math.ceil(Math.sqrt(displayList.size()));
+	        GridLayout gl = new GridLayout(gridSize, gridSize, 4, 4);
 	        frame.setLayout(gl);
 	        JLabel labels[] = new JLabel[displayList.size()];
 	        for(int i = 0; i < displayList.size(); i++) {
