@@ -72,6 +72,8 @@ public class Index {
 	public static void showImageGrid(ArrayList<String> displayList, String when) {
 		try {
 	        JFrame frame = new JFrame();
+	        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	        //Kuch karo
 	        GridLayout gl = new GridLayout(5, 5, 4, 4);
@@ -91,7 +93,7 @@ public class Index {
 	        	frame.add(labels[i]);
 	        }
 	        //frame.setTitle(img.name); @TODO: Pass in name here!
-	        frame.pack();
+	        //frame.pack();
 	        frame.setVisible(true);
 	    } catch (Exception e) {
 	        e.printStackTrace();

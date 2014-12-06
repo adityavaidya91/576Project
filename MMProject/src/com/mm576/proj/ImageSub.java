@@ -16,8 +16,10 @@ public class ImageSub {
 	Mat cvImg;
 	List<Mat> cvChannels;
 	String name;
+	File file;
 	
 	public ImageSub(File file, int width, int height) {
+		this.file = file;
 		this.width = width;
 		this.height = height;
 		name = file.getName();
