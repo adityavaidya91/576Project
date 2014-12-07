@@ -44,8 +44,8 @@ public class Index {
 	
 	public static void iterateAndClusterDirectory(String dirName) {
 		File[] files = new File(dirName).listFiles();
-		imgArr = new ImageSub[files.length];
-		//imgArr = new ImageSub[50];
+		//imgArr = new ImageSub[files.length];
+		imgArr = new ImageSub[50];
 		imgMap = new HashMap<>();
 		for(int i = 0; i < imgArr.length; i++) {
 			imgArr[i] = new ImageSub(files[i], WIDTH, HEIGHT);
@@ -61,20 +61,28 @@ public class Index {
 	
 	public static void showImageGrid(ArrayList<String> displayList, String when) {
 		try {
-			if(panel != null)
+			if(panel != null) {
 				frame.getContentPane().remove(panel);
+			}
 			
 			panel = new MyPanel();
 	        int gridSize = (int)Math.ceil(Math.sqrt(displayList.size()));
-	        GridLayout gl = new GridLayout(gridSize, gridSize, 4, 4);
+	        GridLayout gl = new GridLayout(gridSize + 1, gridSize, 4, 4);
 	        panel.setLayout(gl);
+	        if(when == "After") {
+	        	JLabel label = new JLabel();
+	        	BufferedImage back = ImageIO.read(new File("back.png"));
+	        	label.setIcon(new ImageIcon(back.getScaledInstance(WIDTH/3, HEIGHT/3, Image.SCALE_SMOOTH)));
+	        	label.addMouseListener(new MyMouseListener(new ArrayList<>(clusterReps.keySet()), null, "back"));
+	        	panel.add(label);
+	        }
 	        JLabel labels[] = new JLabel[displayList.size()];
 	        
 	        for(int i = 0; i < displayList.size(); i++) {
 	        	BufferedImage imgToAdd = imgArr[imgMap.get(displayList.get(i))].javaImg;
 	        	labels[i] = new JLabel();
 	        	labels[i].setIcon(new ImageIcon(imgToAdd.getScaledInstance(WIDTH/3, HEIGHT/3, Image.SCALE_SMOOTH)));
-	        	System.out.println("Binding Listeners....");
+	        	//System.out.println("Binding Listeners....");
 	        	if(when == "Initial")
 	        		labels[i].addMouseListener(new MyMouseListener(clusterReps.get(displayList.get(i)), null, when));
 	        	else if(when == "After"){
