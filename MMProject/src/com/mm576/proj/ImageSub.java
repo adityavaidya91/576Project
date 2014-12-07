@@ -1,9 +1,14 @@
 package com.mm576.proj;
 
+import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.util.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -13,6 +18,7 @@ public class ImageSub {
 	
 	int width, height;
 	BufferedImage javaImg;
+	BufferedImage[] videoImgs;
 	Mat cvImg;
 	List<Mat> cvChannels;
 	String name;
@@ -23,13 +29,19 @@ public class ImageSub {
 		this.width = width;
 		this.height = height;
 		name = file.getName();
-		javaImg = readImage(file);
+		if(file.length() == width*height*3) {
+			readImage();
+		}
+		else {
+			readVideo();
+		}
 		cvChannels = new LinkedList<Mat>();
+		//System.out.println(javaImg);
 		cvImg = ImageSub.img2Mat(cvChannels, javaImg);
 	}
 	
 	//This is the starter code for the course
-	public BufferedImage readImage(File file){
+	public void readImage(){
 		try{
 			BufferedImage img = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
 			//File file = new File(fileName);
@@ -56,12 +68,90 @@ public class ImageSub {
                     ind++;
                 }
             }
-			return img;
+            //System.out.println(img);
+			this.javaImg = img;
 		}
 		catch(Exception e) {
 			System.out.println(e + "In file read, Images");
+			this.javaImg = null;
 		}
-		return null;
+	}
+	
+	//Read video
+	public void readVideo() {
+		try{
+			InputStream is = new FileInputStream(file);
+
+	        long len = file.length();
+	        byte[] bytes = new byte[(int)len];
+	        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+	        int numberOfFrames = 0;
+	        int offset = 0; 
+	        int numRead = 0;
+	        int ind = 0;
+	        while ( offset < bytes.length && (numRead=is.read(bytes, offset, 352*288*3)) >= 0) 
+	        {
+	            numberOfFrames++;
+	            offset += numRead;
+	        }	
+	        this.videoImgs = new BufferedImage[numberOfFrames];
+	        for(int i=0; i<numberOfFrames; i++){
+	        	videoImgs[i] = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+	        }
+	        //System.out.println("Number of Frames in video = "+numberOfFrames);
+	        for(int i=0; i<numberOfFrames; i++){
+	            //imgArr[i] = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+	           // System.out.println("Processing frame number "+(i+1));
+	            for(int y = 0; y < height; y++)
+	            {
+	                for(int x = 0; x < width; x++)
+	                {
+	                    byte a = 0;
+	                    byte r = bytes[ind];
+	                    byte g = bytes[ind+height*width];
+	                    byte b = bytes[ind+height*width*2]; 
+	                    int pix = 0xff000000 | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
+	                    //int pix = ((a << 24) + (r << 16) + (g << 8) + b)
+	                    img.setRGB(x,y,pix);
+	                    ind++;
+	                }
+	            }
+	            ind+=height*width*2;
+	        }
+	        this.javaImg = videoImgs[videoImgs.length/2];
+		} catch(Exception e) {
+			System.out.println(e.toString());
+		}
+	}
+	
+	public void playVideo() {
+		ImageIcon ic = new ImageIcon(videoImgs[0]);
+        JLabel label = new JLabel(ic);
+        JFrame frame = new JFrame();
+        frame.getContentPane().add(label, BorderLayout.CENTER);
+        frame.pack();
+        frame.setVisible(true);
+        //long vidstartTime = System.nanoTime();
+        
+        //Play at 30 fps
+        long frameTime = (long) Math.pow(10, 9)/ 30;
+        
+        for(int i=1;i< videoImgs.length; i++){
+            long startTime = System.nanoTime();
+            ic = new ImageIcon(videoImgs[i]);
+            label.setIcon(ic);
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(label, BorderLayout.CENTER);
+            label.repaint();
+            try{
+                if(System.nanoTime()-startTime < frameTime)
+                    Thread.sleep((frameTime - (long)(System.nanoTime() - startTime))/1000000);
+            }
+            catch(Exception eee){
+            }
+        }
+        //System.out.println("Video time = "+((System.nanoTime()-vidstartTime)/1000000));
 	}
 	
 	//Helper method from codeproject.com, modified a little for converting BufferedImage to Mat
