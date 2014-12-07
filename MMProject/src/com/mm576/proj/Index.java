@@ -1,4 +1,5 @@
 package com.mm576.proj;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -8,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -48,15 +50,15 @@ public class Index {
 	
 	public static void iterateAndClusterDirectory(String dirName) {
 		File[] files = new File(dirName).listFiles();
-		//imgArr = new ImageSub[files.length];
-		imgArr = new ImageSub[50];
+		imgArr = new ImageSub[files.length];
+		//imgArr = new ImageSub[50];
 		imgMap = new HashMap<>();
 		for(int i = 0; i < imgArr.length; i++) {
 			imgArr[i] = new ImageSub(files[i], WIDTH, HEIGHT);
 			imgMap.put(files[i].getName(), i);
 		}		
 		
-		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/3);	
+		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/2);	
 		clusterReps = createClusterReps(k.representativeLevel);
 		ArrayList<String> displayList = new ArrayList<>(clusterReps.keySet());
 		//System.out.println(displayList.toString());
@@ -71,7 +73,7 @@ public class Index {
 			
 			panel = new JPanel();
 	        int gridSize = (int)Math.ceil(Math.sqrt(displayList.size()));
-	        GridLayout gl = new GridLayout(gridSize + 1, gridSize, 4, 4);
+	        GridLayout gl = new GridLayout(gridSize + 1, gridSize, 10, 10);
 	        panel.setLayout(gl);
 	        if(when == "After") {
 	        	JLabel label = new JLabel();
@@ -85,7 +87,7 @@ public class Index {
 	        for(int i = 0; i < displayList.size(); i++) {
 	        	BufferedImage imgToAdd = imgArr[imgMap.get(displayList.get(i))].javaImg;
 	        	labels[i] = new JLabel();
-	        	labels[i].setIcon(new ImageIcon(imgToAdd.getScaledInstance(WIDTH/3, HEIGHT/3, Image.SCALE_SMOOTH)));
+	        	labels[i].setIcon(new ImageIcon(imgToAdd.getScaledInstance(WIDTH/2, HEIGHT/2, Image.SCALE_SMOOTH)));
 	        	//System.out.println("Binding Listeners....");
 	        	if(when == "Initial")
 	        		labels[i].addMouseListener(new MyMouseListener(clusterReps.get(displayList.get(i)), null, when));
@@ -97,6 +99,9 @@ public class Index {
 	        	panel.add(labels[i]);
 	        }
 	        pane = new JScrollPane(panel);
+	        panel.setBackground(Color.white);
+	        frame.getContentPane().setBackground(Color.WHITE);
+	        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 	        frame.add(pane);
 	        frame.validate();
 	        frame.repaint();
