@@ -125,8 +125,8 @@ public class ImageSub {
 		}
 	}
 	
-	public void playVideo() {
-		ImageIcon ic = new ImageIcon(videoImgs[0]);
+	public static void playVideo(ImageSub img) {
+		ImageIcon ic = new ImageIcon(img.videoImgs[0]);
         JLabel label = new JLabel(ic);
         JFrame frame = new JFrame();
         frame.getContentPane().add(label, BorderLayout.CENTER);
@@ -137,9 +137,9 @@ public class ImageSub {
         //Play at 30 fps
         long frameTime = (long) Math.pow(10, 9)/ 30;
         
-        for(int i=1;i< videoImgs.length; i++){
+        for(int i=1;i< img.videoImgs.length; i++){
             long startTime = System.nanoTime();
-            ic = new ImageIcon(videoImgs[i]);
+            ic = new ImageIcon(img.videoImgs[i]);
             label.setIcon(ic);
             frame.getContentPane().removeAll();
             frame.getContentPane().add(label, BorderLayout.CENTER);
@@ -154,6 +154,18 @@ public class ImageSub {
         //System.out.println("Video time = "+((System.nanoTime()-vidstartTime)/1000000));
 	}
 	
+	//This displays only one image
+	public static void showResult(ImageSub img) {
+	    try {
+	        JFrame frame = new JFrame();
+	        frame.getContentPane().add(new JLabel(new ImageIcon(img.javaImg)));
+	        frame.setTitle(img.name);
+	        frame.pack();
+	        frame.setVisible(true);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
 	//Helper method from codeproject.com, modified a little for converting BufferedImage to Mat
 	public static Mat img2Mat(List<Mat> mv, BufferedImage in)
     {

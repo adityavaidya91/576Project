@@ -55,18 +55,7 @@ public class Index {
 		
 	}
 	
-	//This displays only one image
-	public static void showResult(ImageSub img) {
-	    try {
-	        JFrame frame = new JFrame();
-	        frame.getContentPane().add(new JLabel(new ImageIcon(img.javaImg)));
-	        frame.setTitle(img.name);
-	        frame.pack();
-	        frame.setVisible(true);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	}
+	
 	
 	public static void showImageGrid(ArrayList<String> displayList, String when) {
 		try {
@@ -79,11 +68,18 @@ public class Index {
 	        GridLayout gl = new GridLayout(gridSize, gridSize, 4, 4);
 	        frame.setLayout(gl);
 	        JLabel labels[] = new JLabel[displayList.size()];
+	        
 	        for(int i = 0; i < displayList.size(); i++) {
 	        	BufferedImage imgToAdd = imgArr[imgMap.get(displayList.get(i))].javaImg;
 	        	labels[i] = new JLabel();
 	        	labels[i].setIcon(new ImageIcon(imgToAdd.getScaledInstance(WIDTH/3, HEIGHT/3, Image.SCALE_SMOOTH)));
-	        	labels[i].addMouseListener(new MyMouseListener(clusterReps.get(displayList.get(i)), when));
+	        	if(when == "Initial")
+	        		labels[i].addMouseListener(new MyMouseListener(clusterReps.get(displayList.get(i)), null, when));
+	        	else if(when == "After"){
+	        		//System.out.println(imgArr[imgMap.get(displayList.get(i))]);
+	        		labels[i].addMouseListener(new MyMouseListener(null, imgArr[imgMap.get(displayList.get(i))], when));
+	        	}
+	        		
 	        	frame.add(labels[i]);
 	        }
 	        //frame.setTitle(img.name); @TODO: Pass in name here!

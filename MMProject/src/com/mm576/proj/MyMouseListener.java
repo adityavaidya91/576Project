@@ -8,9 +8,11 @@ public class MyMouseListener implements MouseListener {
 	
 	ArrayList<String> displayList;
 	String when;
-	MyMouseListener(ArrayList<String> displayList, String when) {
+	ImageSub img;
+	MyMouseListener(ArrayList<String> displayList, ImageSub img, String when) {
 		this.displayList = displayList;
 		this.when = when;
+		this.img = img;
 	}
 
 	@Override
@@ -22,6 +24,10 @@ public class MyMouseListener implements MouseListener {
 			break;
 		case "After":
 			//Bind image/video players
+			if(img.videoImgs == null)
+				ImageSub.showResult(img);
+			else	
+				ImageSub.playVideo(img);
 			break;
 		default:
 			break;
