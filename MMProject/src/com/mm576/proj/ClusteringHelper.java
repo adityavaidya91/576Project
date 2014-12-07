@@ -1,15 +1,18 @@
 package com.mm576.proj;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-
-import com.apporiented.algorithm.clustering.*;
-import com.apporiented.algorithm.clustering.visualization.*;
 
 import org.opencv.imgproc.Imgproc;
+
+import com.apporiented.algorithm.clustering.AverageLinkageStrategy;
+import com.apporiented.algorithm.clustering.Cluster;
+import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
+import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
+import com.apporiented.algorithm.clustering.visualization.DendrogramPanel;
 
 public class ClusteringHelper {
 	
@@ -59,7 +62,9 @@ public class ClusteringHelper {
 			for(int j = 0; j < imgArr.length; j++) {
 				if(i != j && diffArr[j][i] == 0) {
 					diffArr[i][j] = compareImages(imgArr[i], imgArr[j]);
-					//diffArr[i][j] = Imgproc.compareHist(imgArr[i].cvGrayscale, imgArr[j].cvGrayscale, Imgproc.CV_COMP_BHATTACHARYYA);
+					
+					//Could try uncommenting this too. Comment the line above if you are doing so
+					//diffArr[i][j] = SSIM.compareImages(img1.cvImg,  img2.cvImg);
 					diffArr[j][i] = diffArr[i][j];
 				}
 			}
@@ -75,7 +80,8 @@ public class ClusteringHelper {
 		double sumOfSquares = 0;
 		for(int i = 0; i < channels.length; i++) {
 			channels[i] = Imgproc.compareHist(img1.cvChannels.get(i), img2.cvChannels.get(i), Imgproc.CV_COMP_BHATTACHARYYA);
-			//Uncomment this
+			
+			//Uncomment this. Comment the line above
 			//channels[i] = SSIM.compareImages(img1.cvChannels.get(i),  img2.cvChannels.get(i));
 			sumOfSquares += channels[i];
 		}

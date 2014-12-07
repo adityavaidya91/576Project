@@ -2,9 +2,11 @@ package com.mm576.proj;
 
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -13,7 +15,6 @@ import javax.swing.JLabel;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
 
 public class ImageSub {
 	
@@ -56,7 +57,6 @@ public class ImageSub {
             int ind = 0;
             for(int y = 0; y < height; y++){
                 for(int x = 0; x < width; x++){
-                    byte a = 0;
                     byte r = bytes[ind];
                     byte g = bytes[ind+height*width];
                     byte b = bytes[ind+height*width*2]; 
@@ -69,6 +69,7 @@ public class ImageSub {
             }
             //System.out.println(img);
 			this.javaImg = img;
+			is.close();
 		}
 		catch(Exception e) {
 			System.out.println(e + "In file read, Images");
@@ -106,7 +107,6 @@ public class ImageSub {
 	            {
 	                for(int x = 0; x < width; x++)
 	                {
-	                    byte a = 0;
 	                    byte r = bytes[ind];
 	                    byte g = bytes[ind+height*width];
 	                    byte b = bytes[ind+height*width*2]; 
@@ -120,6 +120,7 @@ public class ImageSub {
 	            imageCopy(img, this.videoImgs[i]);
 	        }
 	        this.javaImg = videoImgs[videoImgs.length/2];
+	        is.close();
 		} catch(Exception e) {
 			System.out.println(e.toString());
 		}
@@ -180,7 +181,6 @@ public class ImageSub {
     {
           Mat out;
           byte[] data;
-          int r, g, b;
 
           out = new Mat(in.getHeight(), in.getWidth(), CvType.CV_8UC3);
           data = new byte[in.getHeight() * in.getWidth() * (int)out.elemSize()];

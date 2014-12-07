@@ -1,20 +1,23 @@
 package com.mm576.proj;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.*;
-import java.io.*;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
-import java.util.*;
-
-import org.opencv.core.*;
-//This import is for all calcHist, compare and image processing
-import org.opencv.imgproc.*;
+import org.opencv.core.Core;
 
 import com.apporiented.algorithm.clustering.Cluster;
+//This import is for all calcHist, compare and image processing
 
 public class Index {
 	
