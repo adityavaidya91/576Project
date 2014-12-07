@@ -28,7 +28,9 @@ public class ClusteringHelper {
 			names[i] = imgArr[i].name;
 		}
 		diffArr = new double[imgArr.length][imgArr.length];
+		System.out.println("Calculating Similarity....");
 		calcDist();
+		System.out.println("Clustering....");
 		ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
 		Cluster cluster = alg.performClustering(diffArr, names,
 		    new AverageLinkageStrategy());
@@ -57,6 +59,7 @@ public class ClusteringHelper {
 			for(int j = 0; j < imgArr.length; j++) {
 				if(i != j && diffArr[j][i] == 0) {
 					diffArr[i][j] = compareImages(imgArr[i], imgArr[j]);
+					//diffArr[i][j] = Imgproc.compareHist(imgArr[i].cvGrayscale, imgArr[j].cvGrayscale, Imgproc.CV_COMP_BHATTACHARYYA);
 					diffArr[j][i] = diffArr[i][j];
 				}
 			}
@@ -72,9 +75,9 @@ public class ClusteringHelper {
 		double sumOfSquares = 0;
 		for(int i = 0; i < channels.length; i++) {
 			channels[i] = Imgproc.compareHist(img1.cvChannels.get(i), img2.cvChannels.get(i), Imgproc.CV_COMP_BHATTACHARYYA);
-			sumOfSquares += channels[i];
+			sumOfSquares += channels[i] * i * 100;
 		}
-		sumOfSquares /= channels.length;
+		//sumOfSquares /= channels.length;
 		//System.out.println(sumOfSquares);
 		return sumOfSquares;
 	}

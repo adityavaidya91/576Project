@@ -13,13 +13,14 @@ import javax.swing.JLabel;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
 
 public class ImageSub {
 	
 	int width, height;
 	BufferedImage javaImg;
 	BufferedImage[] videoImgs;
-	Mat cvImg;
+	Mat cvImg, cvGrayscale;
 	List<Mat> cvChannels;
 	String name;
 	//File file;
@@ -38,6 +39,7 @@ public class ImageSub {
 		cvChannels = new LinkedList<Mat>();
 		//System.out.println(javaImg);
 		cvImg = ImageSub.img2Mat(cvChannels, javaImg);
+		//cvGrayscale = ImageSub.img2MatGray(cvChannels, javaImg);
 	}
 	
 	//This is the starter code for the course
@@ -118,6 +120,7 @@ public class ImageSub {
 	                }
 	            }
 	            ind+=height*width*2;
+	            imageCopy(img, this.videoImgs[i]);
 	        }
 	        this.javaImg = videoImgs[videoImgs.length/2];
 		} catch(Exception e) {
@@ -125,11 +128,20 @@ public class ImageSub {
 		}
 	}
 	
+	public void imageCopy(BufferedImage input, BufferedImage output){ 
+	  for (int i=0;i<output.getHeight();i++) {
+	      for (int j=0;j<output.getWidth();j++) {
+	          output.setRGB(j, i, input.getRGB(j, i));
+	      }
+	  }
+	}
+	
 	public static void playVideo(ImageSub img) {
 		ImageIcon ic = new ImageIcon(img.videoImgs[0]);
         JLabel label = new JLabel(ic);
         JFrame frame = new JFrame();
         frame.getContentPane().add(label, BorderLayout.CENTER);
+        frame.setTitle(img.name);
         frame.pack();
         frame.setVisible(true);
         //long vidstartTime = System.nanoTime();
@@ -191,4 +203,30 @@ public class ImageSub {
            }
            return out;
      }
+	
+	//Helper method from codeproject.com, modified a little for converting BufferedImage to Mat
+		public static Mat img2MatGray(List<Mat> mv, BufferedImage in)
+	    {
+	          Mat out;
+	          byte[] data;
+	          int r, g, b;
+
+	          out = new Mat(in.getHeight(), in.getWidth(), CvType.CV_8UC3);
+	          data = new byte[in.getHeight() * in.getWidth() * (int)out.elemSize()];
+	          int[] dataBuff = in.getRGB(0, 0, in.getWidth(), in.getHeight(), null, 0, in.getWidth());
+	          for(int i = 0; i < dataBuff.length; i++)
+	          {
+	              data[i*3] = (byte) ((dataBuff[i] >> 16) & 0xFF);
+	              data[i*3 + 1] = (byte) ((dataBuff[i] >> 8) & 0xFF);
+	              data[i*3 + 2] = (byte) ((dataBuff[i] >> 0) & 0xFF);
+	          }
+
+	           out.put(0, 0, data);
+	          // Imgproc.cvtColor(out, out, CvType.CV);
+	           //Core.split(out, mv);
+//	           for(Mat m : mv) {
+//	        	   m.convertTo(m, CvType.CV_32F);
+//	           }
+	           return out;
+	     }
 }
