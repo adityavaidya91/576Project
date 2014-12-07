@@ -70,7 +70,7 @@ public class Index {
 	
 	public static void showImageGrid(ArrayList<String> displayList, String when) {
 		try {
-	        JFrame frame = new JFrame();
+	        MyFrame frame = new MyFrame(when);
 	        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,13 +83,7 @@ public class Index {
 	        	BufferedImage imgToAdd = imgArr[imgMap.get(displayList.get(i))].javaImg;
 	        	labels[i] = new JLabel();
 	        	labels[i].setIcon(new ImageIcon(imgToAdd.getScaledInstance(WIDTH/3, HEIGHT/3, Image.SCALE_SMOOTH)));
-	        	if(when.equals("Initial")) {
-	        		//bind listeners
-	        		labels[i].addMouseListener(new MyMouseListener(clusterReps.get(displayList.get(i))));
-	        	}
-	        	else {
-	        		//Navigate back option
-	        	}
+	        	labels[i].addMouseListener(new MyMouseListener(clusterReps.get(displayList.get(i)), when));
 	        	frame.add(labels[i]);
 	        }
 	        //frame.setTitle(img.name); @TODO: Pass in name here!

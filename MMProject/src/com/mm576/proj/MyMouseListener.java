@@ -7,14 +7,26 @@ import java.util.ArrayList;
 public class MyMouseListener implements MouseListener {
 	
 	ArrayList<String> displayList;
-	MyMouseListener(ArrayList<String> displayList) {
+	String when;
+	MyMouseListener(ArrayList<String> displayList, String when) {
 		this.displayList = displayList;
+		this.when = when;
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		Index.showImageGrid(displayList, "After");
+		switch(when) {
+		case "Initial": 
+			Index.showImageGrid(displayList, "After");
+			break;
+		case "After":
+			//Bind image/video players
+			break;
+		default:
+			break;
+		}
+		
 	}
 
 	@Override
