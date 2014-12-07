@@ -48,15 +48,15 @@ public class Index {
 	
 	public static void iterateAndClusterDirectory(String dirName) {
 		File[] files = new File(dirName).listFiles();
-		//imgArr = new ImageSub[files.length];
-		imgArr = new ImageSub[50];
+		imgArr = new ImageSub[files.length];
+		//imgArr = new ImageSub[50];
 		imgMap = new HashMap<>();
 		for(int i = 0; i < imgArr.length; i++) {
 			imgArr[i] = new ImageSub(files[i], WIDTH, HEIGHT);
 			imgMap.put(files[i].getName(), i);
 		}		
 		
-		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/2);	
+		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/3);	
 		clusterReps = createClusterReps(k.representativeLevel);
 		ArrayList<String> displayList = new ArrayList<>(clusterReps.keySet());
 		//System.out.println(displayList.toString());
