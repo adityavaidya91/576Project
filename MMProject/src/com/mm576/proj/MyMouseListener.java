@@ -9,6 +9,7 @@ public class MyMouseListener implements MouseListener {
 	ArrayList<String> displayList;
 	String when;
 	ImageSub img;
+	
 	MyMouseListener(ArrayList<String> displayList, ImageSub img, String when) {
 		this.displayList = displayList;
 		this.when = when;

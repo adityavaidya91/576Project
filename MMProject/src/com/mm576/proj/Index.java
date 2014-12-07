@@ -66,7 +66,7 @@ public class Index {
 				frame.remove(pane);
 			}
 			
-			panel = new MyPanel();
+			panel = new JPanel();
 	        int gridSize = (int)Math.ceil(Math.sqrt(displayList.size()));
 	        GridLayout gl = new GridLayout(gridSize + 1, gridSize, 4, 4);
 	        panel.setLayout(gl);

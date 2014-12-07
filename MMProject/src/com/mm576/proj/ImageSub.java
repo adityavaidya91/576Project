@@ -20,13 +20,12 @@ public class ImageSub {
 	int width, height;
 	BufferedImage javaImg;
 	BufferedImage[] videoImgs;
-	Mat cvImg, cvGrayscale;
+	Mat cvImg;
 	List<Mat> cvChannels;
 	String name;
 	//File file;
 	
 	public ImageSub(File file, int width, int height) {
-		//this.file = file;
 		this.width = width;
 		this.height = height;
 		name = file.getName();
@@ -37,9 +36,7 @@ public class ImageSub {
 			readVideo(file);
 		}
 		cvChannels = new LinkedList<Mat>();
-		//System.out.println(javaImg);
 		cvImg = ImageSub.img2Mat(cvChannels, javaImg);
-		//cvGrayscale = ImageSub.img2MatGray(cvChannels, javaImg);
 	}
 	
 	//This is the starter code for the course
@@ -203,30 +200,4 @@ public class ImageSub {
            }
            return out;
      }
-	
-	//Helper method from codeproject.com, modified a little for converting BufferedImage to Mat
-		public static Mat img2MatGray(List<Mat> mv, BufferedImage in)
-	    {
-	          Mat out;
-	          byte[] data;
-	          int r, g, b;
-
-	          out = new Mat(in.getHeight(), in.getWidth(), CvType.CV_8UC3);
-	          data = new byte[in.getHeight() * in.getWidth() * (int)out.elemSize()];
-	          int[] dataBuff = in.getRGB(0, 0, in.getWidth(), in.getHeight(), null, 0, in.getWidth());
-	          for(int i = 0; i < dataBuff.length; i++)
-	          {
-	              data[i*3] = (byte) ((dataBuff[i] >> 16) & 0xFF);
-	              data[i*3 + 1] = (byte) ((dataBuff[i] >> 8) & 0xFF);
-	              data[i*3 + 2] = (byte) ((dataBuff[i] >> 0) & 0xFF);
-	          }
-
-	           out.put(0, 0, data);
-	          // Imgproc.cvtColor(out, out, CvType.CV);
-	           //Core.split(out, mv);
-//	           for(Mat m : mv) {
-//	        	   m.convertTo(m, CvType.CV_32F);
-//	           }
-	           return out;
-	     }
 }
