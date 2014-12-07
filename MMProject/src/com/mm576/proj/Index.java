@@ -43,11 +43,8 @@ public class Index {
 			imgArr[i] = new ImageSub(files[i], WIDTH, HEIGHT);
 			imgMap.put(files[i].getName(), i);
 		}		
-		for(String s: imgMap.keySet()){
-			//if(s.indexOf("015")!=-1 )
-			//	showResult(imgArr[imgMap.get(s)]);
-		}
-		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/4);	
+		
+		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/6);	
 		clusterReps = createClusterReps(k.representativeLevel);
 		ArrayList<String> displayList = new ArrayList<>(clusterReps.keySet());
 		//System.out.println(displayList.toString());

@@ -71,12 +71,12 @@ public class ClusteringHelper {
 		double[] channels = new double[3];
 		double sumOfSquares = 0;
 		for(int i = 0; i < channels.length; i++) {
-			channels[i] = Imgproc.compareHist(img1.cvChannels.get(i), img2.cvChannels.get(i), Imgproc.CV_COMP_CORREL);
-			sumOfSquares += channels[i] * channels[i];
+			channels[i] = Imgproc.compareHist(img1.cvChannels.get(i), img2.cvChannels.get(i), Imgproc.CV_COMP_BHATTACHARYYA);
+			sumOfSquares += channels[i];
 		}
 		sumOfSquares /= channels.length;
 		//System.out.println(sumOfSquares);
-		return Math.sqrt(sumOfSquares);
+		return sumOfSquares;
 	}
 	
 	public ArrayList<ArrayList<Cluster>> bfsCreateLevel(Cluster root) {
