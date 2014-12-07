@@ -26,15 +26,16 @@ public class Index {
 	static final int WIDTH = 352;
 	static final int HEIGHT = 288;
 
-	static MyFrame frame;
-	static MyPanel panel; 
+	static JFrame frame;
+	static JPanel panel; 
+	static JScrollPane pane;
 	//Modify this for now, read in different directories
 	static String dirName = "dataset-1";
 	
 	public static void main( String[] args )
 	{
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
-		frame = new MyFrame("Initial");
+		frame = new JFrame();
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         System.out.println("Reading files....");
@@ -62,7 +63,7 @@ public class Index {
 	public static void showImageGrid(ArrayList<String> displayList, String when) {
 		try {
 			if(panel != null) {
-				frame.getContentPane().remove(panel);
+				frame.remove(pane);
 			}
 			
 			panel = new MyPanel();
@@ -92,7 +93,8 @@ public class Index {
 	        		
 	        	panel.add(labels[i]);
 	        }
-	        frame.getContentPane().add(panel);
+	        pane = new JScrollPane(panel);
+	        frame.add(pane);
 	        frame.validate();
 	        frame.repaint();
 	        
