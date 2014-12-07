@@ -22,18 +22,18 @@ public class ImageSub {
 	Mat cvImg;
 	List<Mat> cvChannels;
 	String name;
-	File file;
+	//File file;
 	
 	public ImageSub(File file, int width, int height) {
-		this.file = file;
+		//this.file = file;
 		this.width = width;
 		this.height = height;
 		name = file.getName();
 		if(file.length() == width*height*3) {
-			readImage();
+			readImage(file);
 		}
 		else {
-			readVideo();
+			readVideo(file);
 		}
 		cvChannels = new LinkedList<Mat>();
 		//System.out.println(javaImg);
@@ -41,7 +41,7 @@ public class ImageSub {
 	}
 	
 	//This is the starter code for the course
-	public void readImage(){
+	public void readImage(File file){
 		try{
 			BufferedImage img = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
 			//File file = new File(fileName);
@@ -78,7 +78,7 @@ public class ImageSub {
 	}
 	
 	//Read video
-	public void readVideo() {
+	public void readVideo(File file) {
 		try{
 			InputStream is = new FileInputStream(file);
 

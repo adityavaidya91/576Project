@@ -15,5 +15,6 @@ public class MyFrame extends JFrame {
 	public void paint(Graphics g) {
 		// TODO Auto-generated method stub
 		super.paint(g);
+		//this.setLayout(null);
 	}
 }
