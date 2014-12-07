@@ -56,7 +56,7 @@ public class Index {
 			imgMap.put(files[i].getName(), i);
 		}		
 		
-		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/8);	
+		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/2);	
 		clusterReps = createClusterReps(k.representativeLevel);
 		ArrayList<String> displayList = new ArrayList<>(clusterReps.keySet());
 		//System.out.println(displayList.toString());
@@ -108,6 +108,7 @@ public class Index {
 	
 	public static HashMap<String, ArrayList<String>> createClusterReps(ArrayList<Cluster> representativeLevel) {
 		HashMap<String, ArrayList<String>> returnMap = new HashMap<String, ArrayList<String>>();
+		ArrayList<String> singleNames = new ArrayList<String>();
 		for(Cluster c: representativeLevel) {
 			if(c.getName().indexOf("&") != -1) {
 				String name = c.getName().substring(0, c.getName().indexOf("&"));
@@ -115,11 +116,10 @@ public class Index {
 				returnMap.put(name, names);
 			}
 			else {
-				ArrayList<String> names = new ArrayList<String>();
-				names.add(c.getName());
-				returnMap.put(c.getName(), names);
+				singleNames.add(c.getName());
 			}
 		}
+		returnMap.put(singleNames.get(0), singleNames);
 		return returnMap;
 	}
 }	
