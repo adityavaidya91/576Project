@@ -12,7 +12,7 @@ import com.apporiented.algorithm.clustering.AverageLinkageStrategy;
 import com.apporiented.algorithm.clustering.Cluster;
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
-import com.apporiented.algorithm.clustering.visualization.DendrogramPanel;
+//import com.apporiented.algorithm.clustering.visualization.DendrogramPanel;
 
 public class ClusteringHelper {
 	
@@ -47,6 +47,7 @@ public class ClusteringHelper {
 		//System.out.println(representativeLevel.toString());
 	}
 	
+	/*
 	public void showDendrogram(Cluster cluster) {
 		DendrogramPanel dp = new DendrogramPanel();
 		dp.setModel(cluster);
@@ -55,7 +56,7 @@ public class ClusteringHelper {
         frame.pack();
         frame.setVisible(true);
 	}
-	
+	*/
 	public void calcDist() {
 		
 		for(int i = 0; i < imgArr.length; i++) {
