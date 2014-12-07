@@ -75,9 +75,11 @@ public class ClusteringHelper {
 		double sumOfSquares = 0;
 		for(int i = 0; i < channels.length; i++) {
 			channels[i] = Imgproc.compareHist(img1.cvChannels.get(i), img2.cvChannels.get(i), Imgproc.CV_COMP_BHATTACHARYYA);
-			sumOfSquares += channels[i] * i * 100;
+			//Uncomment this
+			//channels[i] = SSIM.compareImages(img1.cvChannels.get(i),  img2.cvChannels.get(i));
+			sumOfSquares += channels[i];
 		}
-		//sumOfSquares /= channels.length;
+		sumOfSquares /= channels.length;
 		//System.out.println(sumOfSquares);
 		return sumOfSquares;
 	}
