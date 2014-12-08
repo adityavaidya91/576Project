@@ -140,7 +140,7 @@ public class ImageSub {
         JFrame frame = new JFrame(img.name);
         JLabel label = null;
         // Use a label to display the image
-        for(int i=0; i < img.videoImgs.length; i++)
+        for(int i=0; i < 2; i++)
 	    {   
         	if(label != null)
         		frame.getContentPane().remove(label);
