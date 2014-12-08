@@ -27,8 +27,9 @@ public class MyMouseListener implements MouseListener {
 			//Bind image/video players
 			if(img.videoImgs == null)
 				ImageSub.showResult(img);
-			else	
+			else
 				ImageSub.playVideo(img);
+				
 			break;
 		case "back":
 			Index.showImageGrid(displayList, "Initial");

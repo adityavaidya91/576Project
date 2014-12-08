@@ -1,6 +1,7 @@
 package com.mm576.proj;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -84,7 +85,7 @@ public class ImageSub {
 
 	        long len = file.length();
 	        byte[] bytes = new byte[(int)len];
-	        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+	        //BufferedImage img;
 
 	        int numberOfFrames = 0;
 	        int offset = 0; 
@@ -101,7 +102,7 @@ public class ImageSub {
 	        }
 	        //System.out.println("Number of Frames in video = "+numberOfFrames);
 	        for(int i=0; i<numberOfFrames; i++){
-	            //imgArr[i] = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+	            //img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 	           // System.out.println("Processing frame number "+(i+1));
 	            for(int y = 0; y < height; y++)
 	            {
@@ -112,12 +113,12 @@ public class ImageSub {
 	                    byte b = bytes[ind+height*width*2]; 
 	                    int pix = 0xff000000 | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
 	                    //int pix = ((a << 24) + (r << 16) + (g << 8) + b)
-	                    img.setRGB(x,y,pix);
+	                    this.videoImgs[i].setRGB(x,y,pix);
 	                    ind++;
 	                }
 	            }
 	            ind+=height*width*2;
-	            imageCopy(img, this.videoImgs[i]);
+	            //imageCopy(img, this.videoImgs[i]);
 	        }
 	        this.javaImg = videoImgs[videoImgs.length/2];
 	        is.close();
@@ -135,33 +136,23 @@ public class ImageSub {
 	}
 	
 	public static void playVideo(ImageSub img) {
-		ImageIcon ic = new ImageIcon(img.videoImgs[0]);
-        JLabel label = new JLabel(ic);
-        JFrame frame = new JFrame();
-        frame.getContentPane().add(label, BorderLayout.CENTER);
-        frame.setTitle(img.name);
-        frame.pack();
-        frame.setVisible(true);
-        //long vidstartTime = System.nanoTime();
-        
-        //Play at 30 fps
-        long frameTime = (long) Math.pow(10, 9)/ 30;
-        
-        for(int i=1;i< img.videoImgs.length; i++){
-            long startTime = System.nanoTime();
-            ic = new ImageIcon(img.videoImgs[i]);
-            label.setIcon(ic);
-            frame.getContentPane().removeAll();
-            frame.getContentPane().add(label, BorderLayout.CENTER);
-            label.repaint();
-            try{
-                if(System.nanoTime()-startTime < frameTime)
-                    Thread.sleep((frameTime - (long)(System.nanoTime() - startTime))/1000000);
-            }
-            catch(Exception eee){
-            }
-        }
-        //System.out.println("Video time = "+((System.nanoTime()-vidstartTime)/1000000));
+		long frameTime = (long) Math.pow(10, 3)/30;        
+        JFrame frame = new JFrame(img.name);
+        JLabel label = null;
+        // Use a label to display the image
+        for(int i=0; i < img.videoImgs.length; i++)
+	    {   
+        	if(label != null)
+        		frame.getContentPane().remove(label);
+	        label = new JLabel(new ImageIcon(img.videoImgs[i]));
+	        frame.getContentPane().add(label, BorderLayout.CENTER);
+	        frame.pack();
+	        frame.setVisible(true);
+		    try{ 
+		    	Thread.sleep(frameTime);
+		    } 
+		    catch(InterruptedException ie) { }
+	    }
 	}
 	
 	//This displays only one image

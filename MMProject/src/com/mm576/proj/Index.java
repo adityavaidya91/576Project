@@ -1,4 +1,5 @@
 package com.mm576.proj;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -58,7 +59,7 @@ public class Index {
 			imgMap.put(files[i].getName(), i);
 		}		
 		
-		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/2);	
+		ClusteringHelper k = new ClusteringHelper(imgMap, imgArr, imgArr.length/3);	
 		clusterReps = createClusterReps(k.representativeLevel);
 		ArrayList<String> displayList = new ArrayList<>(clusterReps.keySet());
 		//System.out.println(displayList.toString());
@@ -116,15 +117,16 @@ public class Index {
 		ArrayList<String> singleNames = new ArrayList<String>();
 		for(Cluster c: representativeLevel) {
 			if(c.getName().indexOf("&") != -1) {
-				String name = c.getName().substring(0, c.getName().indexOf("&"));
+				//String name = c.getName().substring(0, c.getName().indexOf("&"));
 				ArrayList<String> names = new ArrayList<>(Arrays.asList(c.getName().split("&")));
-				returnMap.put(name, names);
+				returnMap.put(names.get(names.size()/2), names);
 			}
 			else {
 				singleNames.add(c.getName());
 			}
 		}
-		returnMap.put(singleNames.get(0), singleNames);
+		returnMap.put(singleNames.get(singleNames.size()/2), singleNames);
 		return returnMap;
 	}
+	
 }	
