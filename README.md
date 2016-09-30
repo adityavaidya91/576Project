@@ -1,7 +1,7 @@
-576Project
-==========
+Multimedia Project
+=====================
 
-CSCI 576 Project
+Multimedia Project
 
 Links used:
 
